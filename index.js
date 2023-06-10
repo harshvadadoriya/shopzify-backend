@@ -17,6 +17,7 @@ app.use(
 	cors({
 		origin: [
 			'http://localhost:5173',
+			'http://localhost:5174',
 			'https://temp-shopzify-admin.onrender.com/',
 		],
 		credentials: true,
@@ -27,7 +28,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
-	res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+	res.header(
+		'Access-Control-Allow-Origin',
+		'http://localhost:5173',
+		'http://localhost:5174'
+	);
 	if (req.headers['access-control-request-private-network']) {
 		res.header('Access-Control-Allow-Private-Network', 'true');
 	}
@@ -49,5 +54,8 @@ app.use('/auth', authRouter);
 
 const wishlistRouter = require('./routes/wishlist');
 app.use('/user-wishlist', wishlistRouter);
+
+const cartRouter = require('./routes/cart');
+app.use('/user-cart', cartRouter);
 
 app.listen(3000, () => console.log('Server Started'));
