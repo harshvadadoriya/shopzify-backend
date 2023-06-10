@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const Wishlist = require('../models/wishlist');
+const Cart = require('../models/cart');
 const User = require('../models/user');
 const Product = require('../models/product');
 const verifyToken = require('../middleware/verifyToken');
 
-router.post('/cart', verifyToken, async (req, res) => {
+router.post('/post/cart', verifyToken, async (req, res) => {
 	const { product } = req.body;
 	const productId = product._id;
 	const userId = req.userId;
@@ -17,11 +17,11 @@ router.post('/cart', verifyToken, async (req, res) => {
 		}
 
 		// Find the user's cart
-		let cart = await Wishlist.findOne({ userId });
+		let cart = await Cart.findOne({ userId });
 
 		if (!cart) {
 			// If the cart doesn't exist, create a new one
-			cart = new Wishlist({
+			cart = new Cart({
 				userId,
 				products: [],
 			});
@@ -82,12 +82,10 @@ router.get('/carts', verifyToken, async (req, res) => {
 		}
 
 		// Find the user's cart
-		const cart = await Wishlist.findOne({ userId }).populate(
-			'products.product'
-		);
+		const cart = await Cart.findOne({ userId }).populate('products.product');
 
 		if (!cart) {
-			return res.status(404).json({ message: 'Wishlist not found' });
+			return res.status(404).json({ message: 'Cart not found' });
 		}
 
 		res.status(200).json({ cart });
