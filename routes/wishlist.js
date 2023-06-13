@@ -12,6 +12,7 @@ router.post('/wishlist/toggle', verifyToken, async (req, res) => {
 	}
 
 	const userId = req.userId;
+	console.log(req.body);
 
 	try {
 		// Check if the user exists
